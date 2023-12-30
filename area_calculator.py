@@ -2,6 +2,7 @@ import math
 import time
 import os
 
+os.system('cls')
 print(""" CIRCLE
                   _ _ _ _    _ _ _ _                                            
          /\      |       \  |             /\                                      
@@ -11,6 +12,7 @@ print(""" CIRCLE
      /        \  |      \   |         /        \             
     /          \ |       \  |_ _ _ _ /          \                          MADE BY FilippoCcane     
     """)
+
 domanda_di_cosa = str(input("""Che cosa vuoi fare?
                             
 A: Calcolare circonferenza
@@ -19,8 +21,8 @@ C: Formule inverse
 D: INFO e Report
 :"""))
 
-
 if domanda_di_cosa == str("A"):
+    os.system('cls')
     domanda_dia_or_r = str(input("""Vuoi inserire:
 A: raggio
 B: diametro
@@ -67,6 +69,7 @@ B: diametro
         print("Il risultato è: ", (diametro * math.pi))
         
 elif domanda_di_cosa == str("B"):
+    os.system('cls')
     domanda_dia_or_r = str(input("""Vuoi inserire:
 A: raggio
 B: diametro
@@ -110,9 +113,11 @@ B: diametro
         time.sleep(1)
         os.system('cls')
         
-        print("Il risultato è: ", ((diametro * diametro) * math.pi))
+        raggio = (diametro / 2)
+        print("Il risultato è: ", (raggio * raggio * math.pi))
         
 elif domanda_di_cosa == str("C"):
+    os.system('cls')
     cosa_form_inv = str(input("""Che formula inversa vuoi usare?
                               
 ---------------------------------------                             
@@ -204,8 +209,9 @@ D:Trovare raggio da Circonferenza     |
         print("Il risultato è: ", (dom_circ / math.pi / 2))
         
 elif domanda_di_cosa == str("D"):
-    
+    os.system('cls')
     print("""
+-------------------------------------------------------------------------------------
 Produttore: FilippoCcane
 Language: Italian
 GitHub: @FilippoCcane
@@ -222,4 +228,6 @@ Descrizione:
     Vi ringrazio di aver visualizzato tutto questo!      
           """)
 
+else:
+    print("Errore! Controlla quello che hai scritto!")
 #Lo so che avrei potuto vettere "time.sleep" etc... in un "def" e utilizzarlo ma mi sembrava giusto che voi vedeste tutto quello che c'é dietro.

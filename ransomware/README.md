@@ -8,18 +8,17 @@ I am not responsible for any misuse of this script. Use at your own risk.
 1. Windows
 
 ## Dependencies
-import tkinter as tk
-from tkinter import messagebox
-import os
-from time import sleep
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+
 from cryptography.hazmat.primitives import padding
+
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+
 from cryptography.hazmat.backends import default_backend
-import random 
-import string
-import shutil
-from psutil import boot_time
-import time
+
+psutil
+
+import smtplib
+
+from email.mime.multipart import MIMEMultipart
+
+from email.mime.text import MIMEText

